@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MSBuild.AssemblyVersion</id>
+    <version>1.0.0.0</version>
+    <title>MSBuild.AssemblyVersion</title>
+    <authors>Petr Kozelek</authors>
+    <owners>Petr Kozelek</owners>
+    <licenseUrl>https://github.com/footcha/MSBuildExtensions/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/footcha/MSBuildExtensions</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      MSBuild targets for updating Assembly version during build process. AssemblyInfo can be set by initializing MSBuild property $(AssemblyVersionNumber) before MSBuild target AssemblyVersionUpdate is called.
+    </description>
+    <releaseNotes>1.0.0.0 Initial version</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>msbuild assemblyinfo version  update</tags>
+  </metadata>
+  <files>
+    <file src="targets\**\*.*" target="build/" />
+    <file src="..\..\README.md" target="README.md" />
+  </files>
+</package>
