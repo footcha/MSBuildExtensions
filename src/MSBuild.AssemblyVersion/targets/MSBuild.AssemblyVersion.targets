@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AssemblyVersionUpdateDisabled Condition=" '$(AssemblyVersionUpdateDisabled)' == '' ">false</AssemblyVersionUpdateDisabled>
+    <AssemblyInfoFilePath Condition=" '$(AssemblyInfoFilePath)' == '' ">$(ProjectDir)\Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <AssemblyVersionNumber Condition=" '$(AssemblyVersionNumber)' == '' ">1.0.0.0</AssemblyVersionNumber>
+  </PropertyGroup>
+
+  <Target Name="AssemblyVersionUpdate"
+          BeforeTargets="BeforeBuild"
+          Condition=" '$(AssemblyVersionUpdateDisabled)' == 'false' ">
+    <Message Text="Updating assembly version to $(AssemblyVersionNumber)." />
+
+    <ModifyAssemblyInfo VersionFilePath="$(AssemblyInfoFilePath)"
+                        AssemblyVersion="$(AssemblyVersionNumber)"/>
+  </Target>
+
+  <UsingTask TaskName="ModifyAssemblyInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <VersionFilePath ParameterType="System.String" Required="true" />
+      <AssemblyVersion ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        if (!File.Exists(this.VersionFilePath))
+        {
+            throw new FileNotFoundException(null, this.VersionFilePath);
+        }
+        System.Version.Parse(this.AssemblyVersion);
+
+        var txt = File.ReadAllText(this.VersionFilePath);
+        txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyVersion\("")[\d\.]+(?=""\)\])", this.AssemblyVersion);
+        txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyFileVersion\("")[\d\.]+(?=""\)\])", this.AssemblyVersion);
+
+        new FileInfo(this.VersionFilePath).IsReadOnly = false;
+        File.WriteAllText(this.VersionFilePath, txt);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
