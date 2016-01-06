@@ -12,7 +12,7 @@ before MSBuild target `AssemblyVersionUpdate` is called.
 2. Initialize or update property `$(AssemblyVersionNumber)` declaratively in MSBuild project or a referenced .props file:
    ```xml
    <PropertyGroup>
-       <AssemblyVersionNumber>0.1.2.3</AssemblyVersionNumber>
+       <AssemblyVersionNumber>1.2.3.4</AssemblyVersionNumber>
    </PropertyGroup>
    ```
    
@@ -21,7 +21,7 @@ before MSBuild target `AssemblyVersionUpdate` is called.
    <Target Name="MyCustomUpdateAssemblyVersionNumber"
            BeforeTargets="AssemblyVersionUpdate">
        <PropertyGroup>
-           <AssemblyVersionNumber>0.1.2.3</AssemblyVersionNumber>
+           <AssemblyVersionNumber>1.2.3.4</AssemblyVersionNumber>
         </PropertyGroup>
    </Target>
    ```
