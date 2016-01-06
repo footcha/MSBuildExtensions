@@ -18,6 +18,6 @@
   </metadata>
   <files>
     <file src="targets\**\*.*" target="build/" />
-    <file src="..\..\README.md" target="README.md" />
+    <file src="..\..\LICENSE" target="LICENSE" />
   </files>
 </package>
