@@ -4,15 +4,40 @@
     <AssemblyVersionUpdateDisabled Condition=" '$(AssemblyVersionUpdateDisabled)' == '' ">false</AssemblyVersionUpdateDisabled>
     <AssemblyInfoFilePath Condition=" '$(AssemblyInfoFilePath)' == '' ">$(ProjectDir)\Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
     <AssemblyVersionNumber Condition=" '$(AssemblyVersionNumber)' == '' ">1.0.0.0</AssemblyVersionNumber>
+    <IntermediateAssemblyInfoFilePath>$(IntermediateOutputPath)\AssemblyInfo.orig.cs</IntermediateAssemblyInfoFilePath>
   </PropertyGroup>
 
   <Target Name="AssemblyVersionUpdate"
           BeforeTargets="BeforeBuild"
+          DependsOnTargets="AssemblyVersionInit"
           Condition=" '$(AssemblyVersionUpdateDisabled)' == 'false' ">
     <Message Text="Updating assembly version to $(AssemblyVersionNumber)." />
-
     <ModifyAssemblyInfo VersionFilePath="$(AssemblyInfoFilePath)"
                         AssemblyVersion="$(AssemblyVersionNumber)"/>
+  </Target>
+  
+  <Target Name="AssemblyVersionCleanup"
+          AfterTargets="AfterBuild"
+          DependsOnTargets="CopyFromIntermediateOutputPath">
+  </Target>
+  
+  <Target Name="AssemblyVersionInit">
+    <Copy SourceFiles="$(IntermediateAssemblyInfoFilePath)"
+          DestinationFiles="$(AssemblyInfoFilePath)"
+          OverwriteReadOnlyFiles="true"
+          Condition="Exists('$(IntermediateAssemblyInfoFilePath)')"/>
+    <Delete Files="$(IntermediateAssemblyInfoFilePath)"
+            Condition="Exists('$(IntermediateAssemblyInfoFilePath)')"/>
+    <Copy SourceFiles="$(AssemblyInfoFilePath)"
+          DestinationFiles="$(IntermediateAssemblyInfoFilePath)" />
+  </Target>
+  
+  <Target Name="CopyFromIntermediateOutputPath"
+          Condition="Exists('$(IntermediateAssemblyInfoFilePath)')" >
+    <Copy SourceFiles="$(IntermediateAssemblyInfoFilePath)"
+          DestinationFiles="$(AssemblyInfoFilePath)"
+          OverwriteReadOnlyFiles="true" />
+    <Delete Files="$(IntermediateAssemblyInfoFilePath)" />
   </Target>
 
   <UsingTask TaskName="ModifyAssemblyInfo" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
