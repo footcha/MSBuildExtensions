@@ -12,10 +12,8 @@
     <description>
       MSBuild targets for updating Assembly version during build process. AssemblyInfo can be set by initializing MSBuild property $(AssemblyVersionNumber) before MSBuild target AssemblyVersionUpdate is called.
     </description>
-    <releaseNotes>
-      1.0.0.0 Initial version
-      1.1.0.0 AssemblyInfo file is modified on the fly so that changes are not visible to source control
-    </releaseNotes>
+    <releaseNotes></releaseNotes>
+    <developmentDependency>true</developmentDependency>
     <copyright>Copyright 2016</copyright>
     <tags>msbuild assemblyinfo version  update</tags>
   </metadata>
