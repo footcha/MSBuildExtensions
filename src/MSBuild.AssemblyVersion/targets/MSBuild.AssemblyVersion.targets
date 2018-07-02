@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <AssemblyVersionUpdateDisabled Condition=" '$(AssemblyVersionUpdateDisabled)' == '' ">false</AssemblyVersionUpdateDisabled>
-    <AssemblyInfoFilePath Condition=" '$(AssemblyInfoFilePath)' == '' ">$(ProjectDir)\Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <AssemblyInfoFilePath Condition=" '$(AssemblyInfoFilePath)' == '' ">$(ProjectDir.TrimEnd('\'))\Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
     <AssemblyVersionNumber Condition=" '$(AssemblyVersionNumber)' == '' ">1.0.0.0</AssemblyVersionNumber>
     <IntermediateAssemblyInfoFilePath>$(IntermediateOutputPath)\AssemblyInfo.orig.cs</IntermediateAssemblyInfoFilePath>
   </PropertyGroup>
