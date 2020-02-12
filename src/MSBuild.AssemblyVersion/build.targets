@@ -2,5 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <AssemblyVersionNumber>0.1.2.3</AssemblyVersionNumber>
+    <AssemblyInformationalVersion>0.1.2.3</AssemblyInformationalVersion>
   </PropertyGroup>
 </Project>
