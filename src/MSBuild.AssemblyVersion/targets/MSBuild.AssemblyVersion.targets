@@ -4,6 +4,7 @@
     <AssemblyVersionUpdateDisabled Condition=" '$(AssemblyVersionUpdateDisabled)' == '' ">false</AssemblyVersionUpdateDisabled>
     <AssemblyInfoFilePath Condition=" '$(AssemblyInfoFilePath)' == '' ">$(ProjectDir.TrimEnd('\'))\Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
     <AssemblyVersionNumber Condition=" '$(AssemblyVersionNumber)' == '' ">1.0.0.0</AssemblyVersionNumber>
+    <AssemblyInformationalVersion Condition=" '$(AssemblyInformationalVersion)' == '' ">1.0.0.0</AssemblyInformationalVersion>
     <IntermediateAssemblyInfoFilePath>$(IntermediateOutputPath)\AssemblyInfo.orig.cs</IntermediateAssemblyInfoFilePath>
   </PropertyGroup>
 
@@ -12,15 +13,18 @@
           DependsOnTargets="AssemblyVersionInit"
           Condition=" '$(AssemblyVersionUpdateDisabled)' == 'false' ">
     <Message Text="Updating assembly version to $(AssemblyVersionNumber)." />
+    <Message Text="Updating AssemblyInformationalVersion to $(AssemblyInformationalVersion)." />
     <ModifyAssemblyInfo VersionFilePath="$(AssemblyInfoFilePath)"
-                        AssemblyVersion="$(AssemblyVersionNumber)"/>
+                        AssemblyVersion="$(AssemblyVersionNumber)"
+                        AssemblyInformationalVersion="$(AssemblyInformationalVersion)"
+    />
   </Target>
-  
+
   <Target Name="AssemblyVersionCleanup"
           AfterTargets="AfterBuild"
           DependsOnTargets="CopyFromIntermediateOutputPath">
   </Target>
-  
+
   <Target Name="AssemblyVersionInit">
     <Copy SourceFiles="$(IntermediateAssemblyInfoFilePath)"
           DestinationFiles="$(AssemblyInfoFilePath)"
@@ -31,7 +35,7 @@
     <Copy SourceFiles="$(AssemblyInfoFilePath)"
           DestinationFiles="$(IntermediateAssemblyInfoFilePath)" />
   </Target>
-  
+
   <Target Name="CopyFromIntermediateOutputPath"
           Condition="Exists('$(IntermediateAssemblyInfoFilePath)')" >
     <Copy SourceFiles="$(IntermediateAssemblyInfoFilePath)"
@@ -44,6 +48,7 @@
     <ParameterGroup>
       <VersionFilePath ParameterType="System.String" Required="true" />
       <AssemblyVersion ParameterType="System.String" Required="true" />
+      <AssemblyInformationalVersion ParameterType="System.String" Required="false" />
     </ParameterGroup>
     <Task>
       <Using Namespace="System.IO" />
@@ -59,6 +64,11 @@
         var txt = File.ReadAllText(this.VersionFilePath);
         txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyVersion\("")[\d\.]+(?=""\)\])", this.AssemblyVersion);
         txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyFileVersion\("")[\d\.]+(?=""\)\])", this.AssemblyVersion);
+        
+        if(!string.IsNullOrEmpty(this.AssemblyInformationalVersion))
+        {
+          txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyInformationalVersion\("")[0-9a-zA-Z\.\-]+(?=""\)\])", this.AssemblyInformationalVersion);
+        }
 
         new FileInfo(this.VersionFilePath).IsReadOnly = false;
         File.WriteAllText(this.VersionFilePath, txt);
