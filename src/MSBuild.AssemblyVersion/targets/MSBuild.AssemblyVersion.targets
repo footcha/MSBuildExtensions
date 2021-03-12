@@ -67,7 +67,7 @@
         
         if(!string.IsNullOrEmpty(this.AssemblyInformationalVersion))
         {
-          txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyInformationalVersion\("")[0-9a-zA-Z\.\-]+(?=""\)\])", this.AssemblyInformationalVersion);
+          txt = Regex.Replace(txt, @"(?m)(?<=^\[assembly:\sAssemblyInformationalVersion\("")[^""]*(?=""\)\])", this.AssemblyInformationalVersion);
         }
 
         new FileInfo(this.VersionFilePath).IsReadOnly = false;
